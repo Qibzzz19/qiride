@@ -2,7 +2,7 @@ import { imageDataUrlParts } from './image'
 import type { AppSettings } from '../types'
 import { OCR_PROMPT, OCR_SCHEMA } from '../../shared/prompts'
 
-export const DEFAULT_OCR_MODEL = 'gemini-2.5-flash'
+export const DEFAULT_OCR_MODEL = 'gemini-3.5-flash-lite'
 
 export interface OcrResult {
   odometer: number

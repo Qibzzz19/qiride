@@ -29,8 +29,27 @@ import {
 } from '../../shared/prompts'
 import { imageDataUrlParts } from '../../shared/data-url'
 
-const DEFAULT_MODEL = 'gemini-2.5-flash'
-const ALLOWED_MODEL = /^[a-zA-Z0-9._-]{1,64}$/
+const DEFAULT_MODEL = 'gemini-3.5-flash-lite'
+const ALLOWED_MODELS = new Set([
+  'gemini-3.8-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+])
+/** Urutan cadangan saat model utama sibuk (503/429). */
+const MODEL_FALLBACK = [
+  'gemini-3.8-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-flash-lite',
+]
+/** Model lama yang sudah pensiun → arahkan ke model pengganti. */
+const LEGACY_MODEL_MAP: Record<string, string> = {
+  'gemini-2.5-flash': 'gemini-3.8-flash',
+  'gemini-2.5-flash-lite': 'gemini-3.5-flash-lite',
+  'gemini-2.0-flash': 'gemini-3.8-flash',
+  'gemini-2.0-flash-lite': 'gemini-3.5-flash-lite',
+}
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models'
 const TIMEOUT_MS = 45_000
 /** Batas aman foto terkompresi dari client (max 1200px, q0.75). */
@@ -69,7 +88,8 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 function sanitizeModel(raw: unknown): string {
   const value = typeof raw === 'string' ? raw.trim() : ''
-  return ALLOWED_MODEL.test(value) ? value : DEFAULT_MODEL
+  const mapped = LEGACY_MODEL_MAP[value] ?? value
+  return ALLOWED_MODELS.has(mapped) ? mapped : DEFAULT_MODEL
 }
 
 /** Panggil Gemini `:generateContent` dan kembalikan teks mentah tergabung. */
@@ -116,6 +136,45 @@ async function callGeminiText(
   } finally {
     clearTimeout(timer)
   }
+}
+
+function isRetryableMessage(message: string): boolean {
+  return (
+    /\b(429|500|502|503|504)\b/.test(message) ||
+    /high demand|unavailable|overloaded|temporarily|try again later/i.test(message)
+  )
+}
+
+/** Coba model utama, lalu turun ke model lain bila server Gemini sibuk. */
+async function callGeminiWithFallback(
+  body: Record<string, unknown>,
+  preferredModel: string,
+  apiKey: string,
+): Promise<string> {
+  const chain = [
+    preferredModel,
+    ...MODEL_FALLBACK.filter((model) => model !== preferredModel),
+  ]
+  let lastError: unknown = null
+  for (const model of chain) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        return await callGeminiText(body, model, apiKey)
+      } catch (error) {
+        lastError = error
+        const message = error instanceof Error ? error.message : String(error)
+        if (!isRetryableMessage(message)) throw error
+        // Timeout: langsung pindah ke model berikutnya, jangan ulangi model yang sama.
+        if (/abort|timeout|timed out/i.test(message)) break
+        if (attempt === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 700))
+        }
+      }
+    }
+  }
+  throw lastError instanceof Error
+    ? lastError
+    : new Error('Gemini tidak merespons.')
 }
 
 /** Ambil JSON pertama yang valid dari teks (tahan terhadap bungkus ```json). */
@@ -192,7 +251,7 @@ export async function onRequestPost({
         return jsonResponse({ error: 'Prompt terlalu panjang.' }, 400)
       }
 
-      const text = await callGeminiText(
+      const text = await callGeminiWithFallback(
         {
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: {
@@ -222,7 +281,7 @@ export async function onRequestPost({
       return jsonResponse({ error: 'Format foto tidak valid.' }, 400)
     }
 
-    const text = await callGeminiText(
+    const text = await callGeminiWithFallback(
       {
         contents: [
           {

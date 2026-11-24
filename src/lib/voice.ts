@@ -236,7 +236,7 @@ async function callGeminiVoice(
 ): Promise<VoiceIntent> {
   const model = /^[a-zA-Z0-9._-]+$/.test(settings.ocrModel.trim())
     ? settings.ocrModel.trim()
-    : 'gemini-2.5-flash'
+    : 'gemini-3.5-flash-lite'
   const text = await requestVoiceText(transcript, settings, context, model)
   const parsed = extractJson(text)
   if (!parsed) throw new Error('Respons AI tidak berbentuk JSON.')

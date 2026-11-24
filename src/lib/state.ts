@@ -248,7 +248,7 @@ export function normalizeGarageState(value: unknown): GarageState | null {
     intervals: normalizeIntervals(raw.intervals),
     settings: {
       geminiApiKey: stringValue(settingsRaw.geminiApiKey),
-      ocrModel: stringValue(settingsRaw.ocrModel, 'gemini-2.5-flash'),
+      ocrModel: stringValue(settingsRaw.ocrModel, 'gemini-3.5-flash-lite'),
     },
     createdAt: stringValue(raw.createdAt, nowIso()),
   }

@@ -57,9 +57,9 @@ interface SettingsScreenProps {
 }
 
 const MODEL_OPTIONS = [
-  { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash · recommended' },
-  { value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite · hemat' },
-  { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash · legacy' },
+  { value: 'gemini-3.5-flash-lite', label: 'Gemini 3.5 Flash-Lite — disarankan (cepat & hemat)' },
+  { value: 'gemini-3.8-flash', label: 'Gemini 3.8 Flash — paling akurat (lebih lambat)' },
+  { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash-Lite — paling hemat' },
 ]
 
 interface PendingImport {
