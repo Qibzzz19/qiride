@@ -305,7 +305,7 @@ export function buildRecommendation(
   if (status === 'unknown') {
     return {
       title: `Mulai catat ${category.label.toLowerCase()}`,
-      body: 'Belum ada riwayat servis. Catat sekali supaya MotoLog AI bisa memprediksi jadwal berikutnya.',
+      body: 'Belum ada riwayat servis. Catat sekali supaya Qiride bisa memprediksi jadwal berikutnya.',
       targetKM: health.targetKM,
       remainingKM: health.remainingKM,
       remainingDays: health.remainingDays,

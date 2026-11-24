@@ -1,0 +1,10 @@
+# ── Variabel rahasia untuk pengujian lokal Pages Functions ──────────────────
+# Salin berkas ini menjadi `.dev.vars` (sudah masuk .gitignore) lalu isi.
+# HANYA dipakai `npx wrangler pages dev` — tidak pernah ikut ke bundle browser.
+#
+# Untuk production, set variabel yang sama di:
+#   Cloudflare Dashboard → Workers & Pages → <project> → Settings →
+#   Environment variables → GEMINI_API_KEY (klik "Encrypt").
+#
+# Ambil API key gratis di: https://aistudio.google.com/apikey
+GEMINI_API_KEY=

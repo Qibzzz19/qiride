@@ -228,7 +228,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
     try {
       const outcome = await promptInstall()
       if (outcome === 'accepted') {
-        toast('MotoLog AI dipasang di layar utama. Data lokal tetap sama.', {
+        toast('Qiride dipasang di layar utama. Data lokal tetap sama.', {
           tone: 'success',
           title: 'Aplikasi terpasang',
         })
@@ -663,7 +663,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
           <div className="mt-3 flex items-start gap-2 border-t border-white/[0.055] pt-2.5">
             <HardDrive className="mt-0.5 h-3 w-3 shrink-0 text-slate-600" />
             <p className="text-[9px] leading-relaxed text-slate-500">
-              Data MotoLog {backupSizeLabel(state)}. Foto dikompres WebP dan tersimpan di
+              Data Qiride {backupSizeLabel(state)}. Foto dikompres WebP dan tersimpan di
               IndexedDB. Backup disarankan sebelum mengganti perangkat.
             </p>
           </div>
@@ -718,7 +718,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
                 </span>
                 <div>
                   <p className="text-[10px] font-semibold text-slate-100">
-                    {installed ? 'MotoLog AI terpasang' : 'Pasang sebagai aplikasi'}
+                    {installed ? 'Qiride terpasang' : 'Pasang sebagai aplikasi'}
                   </p>
                   <p className="mt-0.5 text-[9px] text-slate-500">
                     {installed
@@ -763,7 +763,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
               <p className="text-[9px] text-slate-500">Versi 1.0.0 · local-first · tanpa akun</p>
             </div>
             <span className="mono text-[8.5px] uppercase tracking-[0.1em] text-slate-600">
-              MotoLog AI
+              Qiride
             </span>
           </div>
         </div>
@@ -826,7 +826,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
       <ConfirmDialog
         open={confirmResetIntervals}
         title="Kembalikan interval default?"
-        description="Semua aturan interval KM dan hari akan kembali ke standar MotoLog. Log dan setup tidak berubah."
+        description="Semua aturan interval KM dan hari akan kembali ke standar Qiride. Log dan setup tidak berubah."
         confirmLabel="Pakai default"
         tone="default"
         onConfirm={() => {

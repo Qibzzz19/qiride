@@ -41,7 +41,7 @@ export function exportJsonBackup(state: GarageState): string {
     exportedAt: new Date().toISOString(),
     data: state,
   }
-  const filename = `motolog-backup-${stamp()}.json`
+  const filename = `qiride-backup-${stamp()}.json`
   downloadBlob(
     filename,
     new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
@@ -79,7 +79,7 @@ export function exportLogsCsv(state: GarageState): string {
         .join(','),
     )
   const csv = `\uFEFF${header.join(',')}\r\n${rows.join('\r\n')}\r\n`
-  const filename = `motolog-logbook-${stamp()}.csv`
+  const filename = `qiride-logbook-${stamp()}.csv`
   downloadBlob(filename, new Blob([csv], { type: 'text/csv;charset=utf-8' }))
   return filename
 }
@@ -108,7 +108,7 @@ export async function parseBackupFile(file: File): Promise<GarageState> {
 
   const state = normalizeGarageState(rawState)
   if (!state) {
-    throw new Error('Data backup tidak memiliki odometer atau struktur MotoLog yang valid.')
+    throw new Error('Data backup tidak memiliki odometer atau struktur Qiride yang valid.')
   }
 
   // Ensure every known category survived normalization.

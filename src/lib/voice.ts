@@ -1,5 +1,9 @@
 import { LOG_CATEGORIES } from '../data/categories'
 import type { AppSettings, CategoryKey } from '../types'
+import { buildVoicePrompt, VOICE_SCHEMA } from '../../shared/prompts'
+
+/** Proxy serverless (mis. Cloudflare Pages Function) bila dikonfigurasi lewat build. */
+const voiceProxyUrl = (import.meta.env.VITE_GEMINI_PROXY_URL as string | undefined)?.trim()
 
 export interface VoiceIntent {
   odometer: number | null
@@ -154,54 +158,8 @@ export function listenOnce(timeoutMs = 15_000): Promise<string> {
 /* Gemini intent parsing                                               */
 /* ------------------------------------------------------------------ */
 
-const VOICE_PROMPT_BASE = `Kamu adalah parser input suara untuk "MotoLog AI", aplikasi catatan servis motor berbahasa Indonesia.
-Ubah transkrip ucapan pengguna menjadi data log servis terstruktur.
-
-Kategori yang boleh dipakai (hanya kunci ini):
-- engineOil = oli mesin ("ganti oli", "oli mesin") — TANPA kata "gardan"
-- gearOil = oli gardan / gear oil / final drive
-- cvt = servis CVT, roller, pulley, grease, per CVT, per sentri, boss, washer, "ring washer", kampas ganda
-- vBelt = v-belt / van belt / fan belt
-- brakePads = kampas rem / brake pad
-- tires = ban depan / ban belakang / ganti ban
-- coolant = coolant / air radiator
-
-Aturan angka:
-- "30 ribu", "tiga puluh ribu" dalam konteks km/kilometer/odometer/jarak = odometer 30000. Jangan tertukar dengan biaya.
-- "85 ribu" atau "rp 85.000" dalam konteks biaya/harga/bayar = cost 85000.
-- odometer = 0 jika tidak disebut, cost = 0 jika tidak disebut.
-
-Aturan lain:
-- date: "YYYY-MM-DD" hanya jika pengguna menyebut hari/tanggal; selain itu string kosong "" (aplikasi pakai hari ini).
-- spec: produk/spesifikasi yang disebut (cth. "Motul 5100 10W-40"), jika tidak ada = "".
-- tags: maksimal 4 tag aksi pendek berbahasa Indonesia (cth. "Ganti oli", "Pasang", "Bersih"), jika tidak ada = [].
-- note: ringkasan padat dalam bahasa Indonesia, maksimal 2 kalimat, dari sudut pandang catatan servis. Jika tidak ada isi berarti = "".
-- confidence: keyakinan 0..1.
-
-Balas HANYA dengan JSON valid sesuai skema.`
-
-function buildVoicePrompt(context: VoiceContext): string {
-  return `${VOICE_PROMPT_BASE}
-
-Konteks:
-- Odometer aktif saat ini: ${context.currentOdometer} KM
-- Hari ini: ${context.today}`
-}
-
-const VOICE_SCHEMA = {
-  type: 'OBJECT',
-  properties: {
-    odometer: { type: 'INTEGER' },
-    categories: { type: 'ARRAY', items: { type: 'STRING' } },
-    spec: { type: 'STRING' },
-    tags: { type: 'ARRAY', items: { type: 'STRING' } },
-    note: { type: 'STRING' },
-    cost: { type: 'INTEGER' },
-    date: { type: 'STRING' },
-    confidence: { type: 'NUMBER' },
-  },
-  required: ['odometer', 'categories', 'spec', 'tags', 'note', 'cost', 'date', 'confidence'],
-} as const
+/* Prompt & skema Gemini tinggal di-import dari shared/prompts.ts
+   supaya identik dengan yang dipakai proxy server. */
 
 function extractJson(text: string): Record<string, unknown> | null {
   const clean = text.trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim()
@@ -279,6 +237,67 @@ async function callGeminiVoice(
   const model = /^[a-zA-Z0-9._-]+$/.test(settings.ocrModel.trim())
     ? settings.ocrModel.trim()
     : 'gemini-2.5-flash'
+  const text = await requestVoiceText(transcript, settings, context, model)
+  const parsed = extractJson(text)
+  if (!parsed) throw new Error('Respons AI tidak berbentuk JSON.')
+
+  return {
+    odometer: sanitizeKm(parsed.odometer),
+    categories: sanitizeCategories(parsed.categories),
+    spec: sanitizeText(parsed.spec, 120),
+    tags: sanitizeTags(parsed.tags),
+    note: sanitizeText(parsed.note),
+    cost: sanitizeCost(parsed.cost),
+    date: sanitizeDate(parsed.date, context.today),
+    provider: 'gemini',
+    transcript,
+  }
+}
+
+/**
+ * Ambil teks mentah hasil Gemini. Urutan: proxy (key tersimpan di server)
+ * dulu, baru panggilan langsung (key di perangkat) — sehingga key tidak perlu
+ * disimpan di browser kalau proxy sudah terpasang.
+ */
+async function requestVoiceText(
+  transcript: string,
+  settings: AppSettings,
+  context: VoiceContext,
+  model: string,
+): Promise<string> {
+  const prompt = `${buildVoicePrompt(context)}\n\nTranskrip: "${transcript}"`
+
+  if (voiceProxyUrl) {
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 30_000)
+    try {
+      const response = await fetch(voiceProxyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({ kind: 'voice', prompt, model }),
+      })
+      if (response.ok) {
+        const payload = (await response.json()) as { text?: unknown }
+        const text = typeof payload.text === 'string' ? payload.text.trim() : ''
+        if (text) return text
+        throw new Error('Proxy tidak mengembalikan teks.')
+      }
+      // HTTP error: lanjut ke panggilan langsung bila key lokal tersedia.
+      if (!settings.geminiApiKey.trim()) {
+        throw new Error(`Proxy suara gagal (HTTP ${response.status}).`)
+      }
+    } catch (error) {
+      if (!settings.geminiApiKey.trim()) throw error
+    } finally {
+      window.clearTimeout(timeout)
+    }
+  }
+
+  if (!settings.geminiApiKey.trim()) {
+    throw new Error('Tidak ada proxy maupun API key untuk input suara.')
+  }
+
   const controller = new AbortController()
   const timeout = window.setTimeout(() => controller.abort(), 30_000)
   try {
@@ -289,7 +308,7 @@ async function callGeminiVoice(
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal,
         body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: `${buildVoicePrompt(context)}\n\nTranskrip: "${transcript}"` }] }],
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0,
             maxOutputTokens: 512,
@@ -315,20 +334,8 @@ async function callGeminiVoice(
         ?.map((part) => part.text ?? '')
         .join('')
         .trim() ?? ''
-    const parsed = extractJson(text)
-    if (!parsed) throw new Error('Respons AI tidak berbentuk JSON.')
-
-    return {
-      odometer: sanitizeKm(parsed.odometer),
-      categories: sanitizeCategories(parsed.categories),
-      spec: sanitizeText(parsed.spec, 120),
-      tags: sanitizeTags(parsed.tags),
-      note: sanitizeText(parsed.note),
-      cost: sanitizeCost(parsed.cost),
-      date: sanitizeDate(parsed.date, context.today),
-      provider: 'gemini',
-      transcript,
-    }
+    if (!text) throw new Error('Respons AI kosong.')
+    return text
   } finally {
     window.clearTimeout(timeout)
   }
@@ -420,8 +427,9 @@ function localParseVoice(transcript: string, context: VoiceContext): VoiceIntent
 }
 
 /**
- * Parse ucapan menjadi struktur log. Pakai Gemini jika API key tersedia,
- * selalu jatuh ke parser lokal bila gagal/offline agar fitur tetap hidup.
+ * Parse ucapan menjadi struktur log. Urutan: proxy (key di server) → Gemini
+ * langsung (key di perangkat) → parser lokal, agar fitur tetap hidup walau
+ * offline atau tanpa konfigurasi AI.
  */
 export async function parseVoiceIntent(
   transcript: string,
@@ -431,7 +439,7 @@ export async function parseVoiceIntent(
   const text = transcript.trim()
   if (!text) throw new Error('Transkrip kosong.')
 
-  if (settings.geminiApiKey.trim()) {
+  if (voiceProxyUrl || settings.geminiApiKey.trim()) {
     try {
       return await callGeminiVoice(text, settings, context)
     } catch {
@@ -443,5 +451,6 @@ export async function parseVoiceIntent(
 }
 
 export function voiceProviderLabel(intent: VoiceIntent): string {
-  return intent.provider === 'gemini' ? 'Gemini 2.5 Flash' : 'Parser lokal'
+  if (intent.provider === 'gemini') return 'Gemini 2.5 Flash'
+  return voiceProxyUrl ? 'Parser lokal · proxy tersedia' : 'Parser lokal'
 }

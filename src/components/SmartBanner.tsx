@@ -45,7 +45,7 @@ export function SmartBanner({
       : 'Semua komponen tercatat aman.'
     : priority
       ? recommendation?.body
-      : 'Catat servis pertamamu. MotoLog AI akan menghitung target KM dan memprediksi jadwal berikutnya.'
+      : 'Catat servis pertamamu. Qiride akan menghitung target KM dan memprediksi jadwal berikutnya.'
 
   return (
     <div

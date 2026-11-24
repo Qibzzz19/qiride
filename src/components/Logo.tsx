@@ -55,7 +55,7 @@ export function LogoLockup({ compact = false }: { compact?: boolean }) {
       <LogoMark className={compact ? 'h-9 w-9' : 'h-10 w-10'} />
       <div className="leading-none">
         <p className="text-[15px] font-bold tracking-[-0.02em] text-white">
-          MotoLog <span className="text-cyan-300">AI</span>
+          Qiri<span className="text-cyan-300">de</span>
         </p>
         <p className="mt-1.5 text-[8px] font-semibold uppercase tracking-[0.22em] text-slate-500">
           Smart garage

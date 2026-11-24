@@ -1,4 +1,4 @@
-# MotoLog AI — Smart Motorcycle Care
+# Qiride — Smart Motorcycle Care
 
 PWA *mobile-first* untuk mencatat servis, tuning, dan perawatan motor harian.
 Dirancang untuk skuter matic (contoh uji: Vario 160) — seluruh komponen, rumus
@@ -85,6 +85,74 @@ demo**, dan seluruh pencatatan/prediksi berjalan lokal.
 
 Untuk pemakaian publik, gunakan proxy agar API key tidak bocor ke sisi klien —
 lihat catatan di dalam `.env.example`.
+
+---
+
+## Deploy (Cloudflare Pages + Pages Functions)
+
+Aplikasi ini **statis** (`dist/`) + IndexedDB (local-first), jadi cukup hosting
+static ber-HTTPS. Fitur PWA install, service worker, dan Web Speech **wajib**
+secure context (HTTPS).
+
+Repo ini sudah menyertakan proxy AI siap pakai di `functions/api/gemini.ts`
+(Cloudflare Pages Functions) yang menangani **OCR spedometer** dan **input
+suara** sekaligus. API key Gemini disimpan di sisi server — tidak pernah masuk
+bundle browser.
+
+### 1. Siapkan API key
+
+Ambil gratis di <https://aistudio.google.com/apikey>.
+
+### 2. Deploy lewat dashboard (paling mudah)
+
+1. Cloudflare Dashboard → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**, pilih repo ini.
+2. Build command: `npm run build` — Build output directory: `dist`.
+3. **Settings → Environment variables** (Production *dan* Preview):
+
+   | Nama | Nilai | Catatan |
+   | --- | --- | --- |
+   | `GEMINI_API_KEY` | `AIza...` | klik **Encrypt** — rahasia |
+   | `VITE_GEMINI_PROXY_URL` | `/api/gemini` | build-time, boleh terlihat |
+
+4. Save & Deploy. Selesai — `https://<project>.pages.dev`.
+
+`functions/` terdeteksi otomatis; `public/_routes.json` membatasi invokasi
+Function hanya ke `/api/*` sehingga aset statis tetap **gratis tanpa batas**.
+
+### 3. Deploy lewat CLI
+
+```bash
+npx wrangler login
+npm run deploy        # build + wrangler pages deploy
+```
+
+Set `GEMINI_API_KEY` di dashboard seperti langkah 2.3 (CLI tidak mengunggah
+rahasia dari `wrangler.toml`).
+
+### 4. Uji proxy secara lokal
+
+```bash
+cp .dev.vars.example .dev.vars   # isi GEMINI_API_KEY
+npm run preview:cf               # http://localhost:8788
+```
+
+`npm run preview:cf` menjalankan `wrangler pages dev` sehingga
+`functions/api/gemini.ts` ikut dieksekusi. Untuk memakainya dari `npm run dev`
+(:5173), set `VITE_GEMINI_PROXY_URL=http://localhost:8788/api/gemini` di `.env`.
+
+### Alternatif hosting
+
+| Opsi | AI proxy | Catatan |
+| --- | --- | --- |
+| **Cloudflare Pages** | ✅ bawaan repo ini | gratis, bandwidth tanpa batas |
+| Netlify | perlu `netlify/functions/` | ubah path, set `VITE_GEMINI_PROXY_URL` |
+| Vercel | perlu `api/gemini.ts` | ubah path, set `VITE_GEMINI_PROXY_URL` |
+| GitHub Pages | ❌ tidak ada serverless | **jangan** simpan key di browser |
+
+> Tanpa proxy, API key yang diisi di **Setelan → AI Vision** disimpan di
+> IndexedDB perangkat. Itu aman untuk pemakaian pribadi, tetapi **jangan**
+> dibagikan ke banyak pengguna.
 
 ---
 

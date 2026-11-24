@@ -96,11 +96,7 @@ export async function compressPhoto(file: File): Promise<CompressedImage> {
   }
 }
 
-export function imageDataUrlParts(dataUrl: string): { mime: string; base64: string } {
-  const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl)
-  if (!match) throw new Error('Format foto tidak valid.')
-  return { mime: match[1], base64: match[2] }
-}
+export { imageDataUrlParts } from '../../shared/data-url'
 
 export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB'

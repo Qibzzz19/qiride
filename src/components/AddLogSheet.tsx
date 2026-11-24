@@ -1731,11 +1731,11 @@ export function AddLogSheet({ open, request, state, onClose, actions }: AddLogSh
 
               {setupKeys.length > 0 && (
                 <div className="overflow-hidden rounded-2xl border border-cyan-400/15 bg-cyan-500/[0.04]">
-                  <button
-                    type="button"
+                  {/* Bukan <button>: di dalamnya ada ToggleSwitch yang sudah jadi
+                      kontrol keyboard/AT. Klik di area ini hanya kenyamanan mouse. */}
+                  <div
                     onClick={() => setSetupOn((value) => !value)}
-                    className="flex w-full items-center gap-3 p-3 text-left"
-                    aria-pressed={setupOn}
+                    className="flex w-full cursor-pointer items-center gap-3 p-3 text-left"
                   >
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-500/10 text-cyan-300">
                       <RefreshCw className="h-4 w-4" />
@@ -1753,7 +1753,7 @@ export function AddLogSheet({ open, request, state, onClose, actions }: AddLogSh
                       onChange={setSetupOn}
                       label="Update setup aktif"
                     />
-                  </button>
+                  </div>
                   {setupOn && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}

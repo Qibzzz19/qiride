@@ -1,5 +1,6 @@
 import { imageDataUrlParts } from './image'
 import type { AppSettings } from '../types'
+import { OCR_PROMPT, OCR_SCHEMA } from '../../shared/prompts'
 
 export const DEFAULT_OCR_MODEL = 'gemini-2.5-flash'
 
@@ -22,20 +23,7 @@ interface ProxyResponse {
   note?: unknown
 }
 
-const GEMINI_PROMPT = `You are a precision odometer OCR engine for motorcycle instrument clusters.
-Analyze the photo and extract ONLY the motorcycle's TOTAL ODOMETER (ODO), in kilometres.
-
-Critical rules:
-- Distinguish TOTAL ODOMETER from TRIP A / TRIP B, clock/time, speed, fuel range, temperature, and RPM.
-- On digital clusters, the total odometer is usually the large persistent number, often labeled "ODO" or shown with "KM". Trip meters are normally smaller, labeled TRIP/A/B, or have a reset dot.
-- On the Yamaha Vario 160 negative-LCD cluster, do not confuse the total ODO with the smaller trip meter or the clock.
-- The total odometer is usually the biggest number, has no decimal separator, and cannot go backwards.
-- Ignore glare, reflections, and partially visible digits. Do not hallucinate digits you cannot see.
-- If the image does not clearly show the odometer, return odometer = 0 and explain in note.
-- Return digits only as an integer (no dots, commas, "KM", or text).
-- Return confidence between 0 and 1.
-
-Return JSON with exactly: { "odometer": number, "confidence": number, "note": string }`
+const GEMINI_PROMPT = OCR_PROMPT
 
 const proxyUrl = (import.meta.env.VITE_GEMINI_PROXY_URL as string | undefined)?.trim()
 
@@ -114,15 +102,7 @@ async function callGemini(
             temperature: 0,
             maxOutputTokens: 256,
             responseMimeType: 'application/json',
-            responseSchema: {
-              type: 'OBJECT',
-              properties: {
-                odometer: { type: 'INTEGER' },
-                confidence: { type: 'NUMBER' },
-                note: { type: 'STRING' },
-              },
-              required: ['odometer', 'confidence', 'note'],
-            },
+            responseSchema: OCR_SCHEMA,
           },
         }),
       },

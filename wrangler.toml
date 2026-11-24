@@ -1,0 +1,15 @@
+# Konfigurasi Cloudflare Pages untuk Qiride.
+#
+# `pages_build_output_dir` membuat `wrangler pages deploy` cukup dijalankan
+# tanpa argumen folder:  npx wrangler pages deploy
+#
+# Folder `functions/` otomatis dideteksi sebagai Pages Functions, jadi
+# `functions/api/gemini.ts` tersedia di  https://<domain>/api/gemini
+#
+# Rahasia (GEMINI_API_KEY) JANGAN ditulis di sini. Simpan lewat:
+#   • Dashboard Cloudflare → Workers & Pages → project → Settings →
+#     Environment variables → GEMINI_API_KEY (Encrypt), atau
+#   • Berkas `.dev.vars` untuk pengujian lokal (`npx wrangler pages dev`).
+name = "qiride"
+compatibility_date = "2026-11-24"
+pages_build_output_dir = "dist"

@@ -150,7 +150,7 @@ export function Dashboard({
       <div className="flex items-center justify-center gap-2 pb-1">
         <span className="h-px w-8 bg-gradient-to-r from-transparent to-slate-700/70" />
         <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-slate-600">
-          MotoLog AI · local-first cockpit
+          Qiride · local-first cockpit
         </p>
         <span className="h-px w-8 bg-gradient-to-l from-transparent to-slate-700/70" />
       </div>

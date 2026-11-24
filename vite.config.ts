@@ -12,8 +12,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'favicon-32.png', 'apple-touch-icon.png', 'icons/*.png'],
       manifest: {
         id: '/',
-        name: 'MotoLog AI — Smart Motorcycle Care',
-        short_name: 'MotoLog AI',
+        name: 'Qiride — Smart Motorcycle Care',
+        short_name: 'Qiride',
         description:
           'Catat servis motor dalam hitungan detik. OCR spedometer AI, riwayat foto, dan prediksi perawatan.',
         lang: 'id',

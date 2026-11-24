@@ -126,7 +126,7 @@ export default function App() {
 
   useEffect(() => {
     const handleOfflineReady = () => {
-      toast('MotoLog AI siap dipakai tanpa koneksi. Logbook tetap bisa dibuka.', {
+      toast('Qiride siap dipakai tanpa koneksi. Logbook tetap bisa dibuka.', {
         tone: 'success',
         title: 'Offline ready',
       })

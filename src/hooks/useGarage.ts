@@ -75,7 +75,7 @@ export function useGarage(): GarageStore {
         if (!normalized) await saveGarageState(initial)
       } catch (error) {
         if (cancelled) return
-        console.error('MotoLog: gagal memuat IndexedDB', error)
+        console.error('Qiride: gagal memuat IndexedDB', error)
         setState(buildSeedState())
         setReady(true)
         loadedRef.current = true
@@ -96,7 +96,7 @@ export function useGarage(): GarageStore {
     if (!ready || !state || !loadedRef.current) return
     const timer = window.setTimeout(() => {
       void saveGarageState(state).catch((error: unknown) => {
-        console.error('MotoLog: gagal menyimpan state', error)
+        console.error('Qiride: gagal menyimpan state', error)
         if (!saveErrorShown.current) {
           saveErrorShown.current = true
           toast('Data gagal disimpan ke perangkat. Cek ruang penyimpanan browser.', {
