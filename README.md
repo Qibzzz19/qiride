@@ -1,11 +1,15 @@
 # Qiride — Smart Motorcycle Care
 
+> **Live:** https://qiride.pages.dev · AI OCR aktif via Cloudflare Pages Functions (/api/gemini).
+
 PWA *mobile-first* untuk mencatat servis, tuning, dan perawatan motor harian.
 Dirancang untuk skuter matic (contoh uji: Vario 160) — seluruh komponen, rumus
 kesehatan, dan preset disusun untuk kebiasaan pemakaian matic, bukan motor rantai.
 
-Semua data disimpan **lokal di perangkat** (IndexedDB). Tidak ada server, tidak
-ada akun, tidak ada pelacakan. Berjalan penuh *offline* setelah sekali dibuka.
+Semua data servis disimpan **lokal di perangkat** (IndexedDB). Tidak ada akun dan
+tidak ada pelacakan. Fitur AI (OCR spedometer & input suara) dikirim ke proxy
+Cloudflare Pages lalu ke Gemini; foto tidak disimpan di server. Fitur non-AI tetap
+berjalan penuh *offline* setelah sekali dibuka.
 
 ---
 
