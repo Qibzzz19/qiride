@@ -48,7 +48,7 @@ export function OdometerCluster({
         >
           <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-[10px] font-extrabold text-white">
             {initials}
-            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-[#0B0F19] bg-emerald-400" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full border border-[#141C2B] bg-emerald-400" />
           </span>
           <span className="hidden text-[10px] font-semibold text-slate-300 sm:block">
             {state.profile.nickname || 'Garasi saya'}

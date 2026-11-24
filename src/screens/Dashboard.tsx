@@ -47,7 +47,7 @@ export function Dashboard({
           <span className="relative flex h-6 w-6 items-center justify-center rounded-full border border-cyan-400/20 bg-cyan-500/[0.08] text-cyan-300">
             <ScanText className="h-3 w-3" />
             <span
-              className={`absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full border border-[#0B0F19] ${
+              className={`absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full border border-[#141C2B] ${
                 configured ? 'bg-emerald-400' : 'bg-amber-400'
               }`}
             />

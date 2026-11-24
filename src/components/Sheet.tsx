@@ -76,7 +76,7 @@ export function Sheet({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0.4 }}
             transition={{ type: 'spring', stiffness: 310, damping: 34, mass: 0.9 }}
-            className="relative flex max-h-[92dvh] w-full max-w-[600px] flex-col overflow-hidden rounded-t-[30px] border border-blue-400/[0.14] bg-[#0A101B] shadow-[0_-20px_90px_-20px_rgba(0,0,0,0.95)] outline-none sm:max-h-[88dvh] sm:rounded-[30px]"
+            className="relative flex max-h-[92dvh] w-full max-w-[600px] flex-col overflow-hidden rounded-t-[30px] border border-blue-400/[0.16] bg-[#161F2E] shadow-[0_-20px_90px_-20px_rgba(0,0,0,0.9)] outline-none sm:max-h-[88dvh] sm:rounded-[30px]"
             onClick={(event) => event.stopPropagation()}
           >
             <div className={`h-px w-full bg-gradient-to-r ${accentLine[accent]}`} />
@@ -126,7 +126,7 @@ export function Sheet({
             </div>
 
             {footer && (
-              <div className="shrink-0 border-t border-white/[0.06] bg-[#0B121F]/95 px-5 pt-3 pb-[calc(env(safe-area-inset-bottom)+14px)] backdrop-blur-xl sm:pb-4">
+              <div className="shrink-0 border-t border-white/[0.07] bg-[#161F2E]/95 px-5 pt-3 pb-[calc(env(safe-area-inset-bottom)+14px)] backdrop-blur-xl sm:pb-4">
                 {footer}
               </div>
             )}

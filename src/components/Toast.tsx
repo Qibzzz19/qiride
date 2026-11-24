@@ -111,7 +111,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 420, damping: 32 }}
-                className={`pointer-events-auto relative overflow-hidden rounded-2xl border ${style.ring} bg-[#0d1422]/95 px-3.5 py-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.9)] backdrop-blur-xl`}
+                className={`pointer-events-auto relative overflow-hidden rounded-2xl border ${style.ring} bg-[#1A2433]/96 px-3.5 py-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl`}
                 style={{ boxShadow: `0 18px 50px -24px ${style.glow}, 0 0 0 1px rgba(255,255,255,0.03)` }}
                 role="status"
               >

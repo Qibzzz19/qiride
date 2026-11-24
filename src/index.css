@@ -7,15 +7,24 @@
   --font-mono:
     'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
-  --color-obsidian: #0b0f19;
-  --color-surface: #111827;
-  --color-gunmetal: #1e293b;
+  /* Basis gelap dinaikkan sedikit: tetap "cockpit", tapi tidak pekat.
+     Kontras teks naik dan mata lebih nyaman di layar HP. */
+  --color-obsidian: #141c2b;
+  --color-surface: #1b2434;
+  --color-gunmetal: #2a3749;
   --color-electric: #3b82f6;
   --color-cobalt: #2563eb;
   --color-cyanpulse: #06b6d4;
   --color-healthy: #10b981;
   --color-due: #f59e0b;
   --color-critical: #ef4444;
+
+  /* Skala slate dipakai hampir murni untuk teks sekunder. Nilai bawaan
+     Tailwind (500 = #64748b) terlalu redup di atas navy gelap, jadi
+     dinaikkan agar lolos WCAG AA tanpa mengubah hierarki visual. */
+  --color-slate-400: #a7b7cb;
+  --color-slate-500: #8fa2b8;
+  --color-slate-600: #7b8ea6;
 
   --radius-4xl: 2rem;
 
@@ -120,21 +129,21 @@
     background:
       linear-gradient(
         158deg,
-        rgba(30, 41, 59, 0.64) 0%,
-        rgba(17, 24, 39, 0.88) 48%,
-        rgba(11, 15, 25, 0.92) 100%
+        rgba(42, 55, 73, 0.62) 0%,
+        rgba(27, 36, 52, 0.86) 48%,
+        rgba(20, 28, 43, 0.92) 100%
       );
-    border: 1px solid rgba(59, 130, 246, 0.14);
+    border: 1px solid rgba(96, 165, 250, 0.16);
     box-shadow:
-      0 24px 55px -36px rgba(0, 0, 0, 0.95),
-      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      0 24px 55px -36px rgba(0, 0, 0, 0.8),
+      inset 0 1px 0 rgba(255, 255, 255, 0.055);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
 
   .glass-panel {
-    background: rgba(17, 24, 39, 0.68);
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: rgba(27, 36, 52, 0.66);
+    border: 1px solid rgba(148, 163, 184, 0.13);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
   }
@@ -188,10 +197,10 @@
     justify-content: center;
     gap: 0.5rem;
     border-radius: 0.9rem;
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(255, 255, 255, 0.05);
     padding: 0.625rem 1rem;
-    color: #cbd5e1;
+    color: #d7e0ea;
     font-size: 0.8125rem;
     font-weight: 600;
     transition:
@@ -201,8 +210,8 @@
   }
 
   .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.07);
-    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.09);
+    color: #ffffff;
   }
 
   .btn-ghost:active {
@@ -217,9 +226,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.9rem;
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    background: rgba(255, 255, 255, 0.035);
-    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    background: rgba(255, 255, 255, 0.05);
+    color: #d7e0ea;
     transition:
       background 150ms ease,
       color 150ms ease,
@@ -228,9 +237,9 @@
   }
 
   .icon-button:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.09);
     color: #fff;
-    border-color: rgba(148, 163, 184, 0.22);
+    border-color: rgba(148, 163, 184, 0.26);
   }
 
   .icon-button:active {
@@ -240,8 +249,8 @@
   .field {
     width: 100%;
     border-radius: 1rem;
-    border: 1px solid rgba(148, 163, 184, 0.14);
-    background: rgba(2, 6, 23, 0.58);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(12, 19, 31, 0.55);
     padding: 0.8125rem 0.875rem;
     color: #f8fafc;
     font-size: 0.875rem;
@@ -253,18 +262,18 @@
   }
 
   .field::placeholder {
-    color: #64748b;
+    color: #8fa2b8;
   }
 
   .field:hover {
-    border-color: rgba(148, 163, 184, 0.22);
+    border-color: rgba(148, 163, 184, 0.28);
   }
 
   .field:focus {
     outline: none;
-    border-color: rgba(59, 130, 246, 0.62);
-    background: rgba(2, 6, 23, 0.82);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.09);
+    border-color: rgba(59, 130, 246, 0.7);
+    background: rgba(12, 19, 31, 0.82);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.11);
   }
 
   .field:disabled {
@@ -274,7 +283,7 @@
   .field-label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #94a3b8;
+    color: #a7b7cb;
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.115em;
@@ -287,10 +296,10 @@
     align-items: center;
     gap: 0.375rem;
     border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.13);
-    background: rgba(148, 163, 184, 0.06);
+    border: 1px solid rgba(148, 163, 184, 0.17);
+    background: rgba(148, 163, 184, 0.08);
     padding: 0.3125rem 0.6875rem;
-    color: #cbd5e1;
+    color: #d7e0ea;
     font-size: 0.6875rem;
     font-weight: 600;
     white-space: nowrap;
@@ -300,7 +309,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #64748b;
+    color: #8fa2b8;
     font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.18em;

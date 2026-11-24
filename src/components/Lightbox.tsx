@@ -75,7 +75,7 @@ export function Lightbox({ photos, initialIndex = 0, open, onClose }: LightboxPr
                   </p>
                   <p className="mono mt-0.5 text-[9px] tracking-wide text-slate-500">
                     {String(index + 1).padStart(2, '0')} / {String(photos.length).padStart(2, '0')}
-                    <span className="mx-1.5 text-slate-700">•</span>
+                    <span className="mx-1.5 text-slate-600">•</span>
                     {formatDateShort(photo.createdAt.slice(0, 10))}
                   </p>
                 </div>

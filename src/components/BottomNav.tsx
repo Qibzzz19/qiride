@@ -89,7 +89,7 @@ export function BottomNav({ active, onChange, onAdd }: BottomNavProps) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[560px] px-3 pb-[calc(env(safe-area-inset-bottom)+10px)]">
       <nav
-        className="pointer-events-auto relative grid grid-cols-5 items-center rounded-[26px] border border-blue-400/[0.14] bg-[#0A101C]/92 px-1.5 pt-1.5 pb-1 shadow-[0_-12px_55px_-20px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-2xl"
+        className="pointer-events-auto relative grid grid-cols-5 items-center rounded-[26px] border border-blue-400/[0.14] bg-[#141C2B]/94 px-1.5 pt-1.5 pb-1 shadow-[0_-12px_55px_-20px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-2xl"
         aria-label="Navigasi utama"
       >
         {LEFT_ITEMS.map((item) => (
@@ -109,7 +109,7 @@ export function BottomNav({ active, onChange, onAdd }: BottomNavProps) {
             whileTap={{ scale: 0.93 }}
             transition={{ type: 'spring', stiffness: 500, damping: 28 }}
             aria-label="Catat servis atau scan spedometer"
-            className="group relative -mt-8 flex h-[62px] w-[62px] items-center justify-center rounded-[22px] border border-blue-300/30 bg-gradient-to-br from-[#3B82F6] via-[#2563EB] to-[#1D4ED8] text-white shadow-[0_16px_40px_-12px_rgba(37,99,235,0.9),inset_0_1px_0_rgba(255,255,255,0.3)] ring-[5px] ring-[#0B0F19]"
+            className="group relative -mt-8 flex h-[62px] w-[62px] items-center justify-center rounded-[22px] border border-blue-300/30 bg-gradient-to-br from-[#3B82F6] via-[#2563EB] to-[#1D4ED8] text-white shadow-[0_16px_40px_-12px_rgba(37,99,235,0.9),inset_0_1px_0_rgba(255,255,255,0.3)] ring-[5px] ring-[#141C2B]"
           >
             <span className="absolute inset-0 rounded-[22px] bg-[radial-gradient(circle_at_30%_15%,rgba(255,255,255,0.3),transparent_45%)]" />
             <Plus className="relative h-[27px] w-[27px]" strokeWidth={2.4} />

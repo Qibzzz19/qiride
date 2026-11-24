@@ -2,13 +2,13 @@
   <defs>
     <linearGradient id="bg" x1="72" y1="20" x2="448" y2="500" gradientUnits="userSpaceOnUse">
       <stop stop-color="#152239" />
-      <stop offset="0.52" stop-color="#0B0F19" />
+      <stop offset="0.52" stop-color="#141C2B" />
       <stop offset="1" stop-color="#070B12" />
     </linearGradient>
     <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="translate(256 210) rotate(90) scale(240 260)" gradientUnits="userSpaceOnUse">
       <stop stop-color="#2563EB" stop-opacity="0.38" />
       <stop offset="0.7" stop-color="#0EA5E9" stop-opacity="0.06" />
-      <stop offset="1" stop-color="#0B0F19" stop-opacity="0" />
+      <stop offset="1" stop-color="#141C2B" stop-opacity="0" />
     </radialGradient>
     <linearGradient id="ring" x1="118" y1="300" x2="394" y2="206" gradientUnits="userSpaceOnUse">
       <stop stop-color="#06B6D4" />
@@ -23,7 +23,7 @@
   <rect width="512" height="512" rx="116" fill="url(#bg)" />
   <rect x="1" y="1" width="510" height="510" rx="115" stroke="#3B82F6" stroke-opacity="0.24" stroke-width="2" />
   <circle cx="256" cy="222" r="236" fill="url(#halo)" />
-  <path d="M 118 300 A 138 138 0 0 1 394 300" stroke="#1E293B" stroke-width="16" stroke-linecap="round" />
+  <path d="M 118 300 A 138 138 0 0 1 394 300" stroke="#2A3749" stroke-width="16" stroke-linecap="round" />
   <path d="M 118 300 A 138 138 0 0 1 394 300" stroke="url(#ring)" stroke-width="10" stroke-linecap="round" stroke-opacity="0.95" />
   <path d="M 128 251 L 143 258 M 384 251 L 369 258" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" stroke-opacity="0.45" />
   <circle cx="118" cy="300" r="8" fill="#06B6D4" />

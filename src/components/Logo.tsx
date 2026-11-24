@@ -18,7 +18,7 @@ export function LogoMark({ className = 'h-10 w-10' }: { className?: string }) {
       <defs>
         <linearGradient id={bgId} x1="9" y1="2" x2="56" y2="62" gradientUnits="userSpaceOnUse">
           <stop stopColor="#152239" />
-          <stop offset="0.55" stopColor="#0B0F19" />
+          <stop offset="0.55" stopColor="#141C2B" />
           <stop offset="1" stopColor="#080C14" />
         </linearGradient>
         <linearGradient id={ringId} x1="15" y1="37" x2="49" y2="26" gradientUnits="userSpaceOnUse">
@@ -33,7 +33,7 @@ export function LogoMark({ className = 'h-10 w-10' }: { className?: string }) {
       </defs>
       <rect width="64" height="64" rx="15" fill={`url(#${bgId})`} />
       <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="14.25" stroke="#3B82F6" strokeOpacity="0.25" strokeWidth="1.5" />
-      <path d="M 15 37 A 17 17 0 0 1 49 37" stroke="#1E293B" strokeWidth="2.4" strokeLinecap="round" />
+      <path d="M 15 37 A 17 17 0 0 1 49 37" stroke="#2A3749" strokeWidth="2.4" strokeLinecap="round" />
       <path d="M 15 37 A 17 17 0 0 1 49 37" stroke={`url(#${ringId})`} strokeWidth="1.7" strokeLinecap="round" />
       <circle cx="15" cy="37" r="1.2" fill="#06B6D4" />
       <circle cx="49" cy="37" r="1.2" fill="#3B82F6" />

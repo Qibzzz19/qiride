@@ -23,8 +23,8 @@ export default defineConfig({
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         orientation: 'portrait-primary',
-        background_color: '#0B0F19',
-        theme_color: '#0B0F19',
+        background_color: '#141C2B',
+        theme_color: '#141C2B',
         categories: ['auto', 'utilities', 'productivity'],
         icons: [
           {

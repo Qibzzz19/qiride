@@ -149,7 +149,7 @@ function OdometerChart({ points }: { points: OdometerPoint[] }) {
           cx={coord.x}
           cy={coord.y}
           r={index === coords.length - 1 ? 3.4 : 2}
-          fill={index === coords.length - 1 ? '#67E8F9' : '#0B0F19'}
+          fill={index === coords.length - 1 ? '#67E8F9' : '#141C2B'}
           stroke="#22D3EE"
           strokeWidth="1.5"
         />
@@ -520,7 +520,7 @@ export function GarageScreen({
                       )}
                       <span className="truncate text-[9px] text-slate-500">
                         {formatDateShort(update.date)}
-                        <span className="mx-1 text-slate-700">·</span>
+                        <span className="mx-1 text-slate-600">·</span>
                         {update.provider === 'gemini'
                           ? 'AI Vision'
                           : update.provider === 'demo'

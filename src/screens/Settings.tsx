@@ -287,8 +287,7 @@ export function SettingsScreen({ state, actions }: SettingsScreenProps) {
                   </span>
                 </div>
                 <p className="mt-1 text-[10px] leading-relaxed text-slate-500">
-                  Gemini 2.5 Flash memisahkan total ODO dari trip A/B dan jam pada layar negatif
-                  Vario 160.
+                  Gemini memisahkan total ODO dari trip A/B dan jam pada layar negatif Vario 160.
                 </p>
               </div>
             </div>

@@ -27,7 +27,7 @@ export function AppBackground() {
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, rgba(11,15,25,0.2) 0%, rgba(11,15,25,0.46) 55%, #0B0F19 100%)',
+            'linear-gradient(180deg, rgba(20,28,43,0.12) 0%, rgba(20,28,43,0.42) 55%, #141C2B 100%)',
         }}
       />
       <div className="scan-noise absolute inset-0" />
